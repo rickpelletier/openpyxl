@@ -21,6 +21,7 @@ from openpyxl.writer.comments import CommentWriter
 from .relations import write_rels
 from .worksheet import (
     write_autofilter,
+    write_datavalidation,
     write_cell,
     write_cols,
     write_format,
@@ -125,6 +126,9 @@ class DumpWorksheet(Worksheet):
                             xf.write(r)
                     except GeneratorExit:
                         pass
+                validations = write_datavalidation(self)
+                if validations is not None:
+                    xf.write(validations)
                 if self.protection.sheet:
                     prot = Element('sheetProtection', dict(self.protection))
                     xf.write(prot)
